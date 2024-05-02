@@ -4,6 +4,7 @@
 #include "fCommon.h"
 #include "fFile.h"
 #include "fSettings.h"
+#include "fLang.h"
 
 typedef struct fDrawThreadData
 {

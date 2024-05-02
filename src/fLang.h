@@ -3,22 +3,42 @@
 
 #include "fCommon.h"
 
+
 typedef enum fLangId
 {
 	flangHELP_GENERAL,
 	flangHELP_INDENDATION,
 	flangHELP_AESTHETICS,
 	flangHELP_MISCELLANEOUS,
-
+	flangUNTITLED,
+	flangSETTINGS_FILE1,
+	flangSETTINGS_FILE2,
+	flangSETTINGS_FILE3,
+	flangSETTINGS_FILE4,
 
 	flang_size
 
 } fLangId_e;
 
-extern const wchar * fLang_strings[flang_size];
+typedef wchar * fLangArr_t[flang_size];
+typedef const wchar * fCLangArr_t[flang_size];
 
+extern fCLangArr_t fLang_strings;
+
+/**
+ * @brief Returns pointer to language string
+ * 
+ */
 #define fLang_get(id)  (fLang_strings[id])
 
+bool fLang_init(void);
+isize fLang_setLang8(const char * restrict language);
+isize fLang_setLang(const wchar * restrict language);
+bool fLang_addKeyword(isize langId, fLangId_e kwId, const wchar * restrict keyword);
+void fLang_destroy(void);
+
+
+// Defined defaults
 
 #define FEMTO_HELP_GENERAL_DEF \
 L"\nGeneral:\n\n" \
@@ -44,6 +64,9 @@ L"\nAesthetics:\n\n" \
 #define FEMTO_HELP_MISCELLANEOUS_DEF \
 L"\nMiscellaneous:\n\n" \
 "  --log=[value] Specifies the use of logging mode\n"
+
+#define FEMTO_UNTITLED_NAME L"untitled"
+
 
 
 #endif

@@ -2080,7 +2080,7 @@ const wchar * femto_readBytes(HANDLE hfile, char ** restrict bytes, usize * rest
 
 void femto_setConTitle(const wchar * restrict fileName, usize tabNum, usize maxTabs)
 {
-	fileName = (fileName == NULL) ? FEMTO_UNTITLED_NAME : fileName;
+	fileName = (fileName == NULL) ? fLang_get(flangUNTITLED) : fileName;
 
 	wchar wndName[MAX_PATH];
 	swprintf_s(wndName, MAX_PATH, L"(%zu/%zu) %s - femto", tabNum, maxTabs, fileName);

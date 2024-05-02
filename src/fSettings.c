@@ -2,6 +2,7 @@
 #include "fArg.h"
 #include "femto.h"
 #include "fSyntax.h"
+#include "fLang.h"
 
 #include <jsonParser.h>
 
@@ -365,21 +366,14 @@ fErr_e fSettings_cmdLine(fSettings_t * restrict self, int argc, const wchar ** r
 	}
 	if (self->settingsFileName == NULL)
 	{
-		if (femto_testFile(FEMTO_SETTINGS_FILE1))
+		const wchar * fSetFile = NULL;
+		if (femto_testFile(fSetFile = FEMTO_SETTINGS_FILE1) ||
+			femto_testFile(fSetFile = FEMTO_SETTINGS_FILE2) ||
+			femto_testFile(fSetFile = FEMTO_SETTINGS_FILE3) ||
+			femto_testFile(fSetFile = FEMTO_SETTINGS_FILE4)
+		)
 		{
-			self->settingsFileName = wcsdup(FEMTO_SETTINGS_FILE1);
-		}
-		else if (femto_testFile(FEMTO_SETTINGS_FILE2))
-		{
-			self->settingsFileName = wcsdup(FEMTO_SETTINGS_FILE2);
-		}
-		else if (femto_testFile(FEMTO_SETTINGS_FILE3))
-		{
-			self->settingsFileName = wcsdup(FEMTO_SETTINGS_FILE3);
-		}
-		else if (femto_testFile(FEMTO_SETTINGS_FILE4))
-		{
-			self->settingsFileName = wcsdup(FEMTO_SETTINGS_FILE4);
+			self->settingsFileName = wcsdup(fSetFile);
 		}
 	}
 
@@ -440,7 +434,7 @@ static inline u16 s_fSettings_checkColor(const jsonObject_t * restrict obj, cons
 		// Search through colorNames
 		for (u8 i = 0; i < MAX_CONSOLE_COLORS; ++i)
 		{
-			if (!firstDone && strncmp(value, colorNames[i], commaIdx) == 0)
+			if (!firstDone && (strncmp(value, colorNames[i], commaIdx) == 0))
 			{
 				if (comma == NULL)
 				{
@@ -449,7 +443,7 @@ static inline u16 s_fSettings_checkColor(const jsonObject_t * restrict obj, cons
 				ret |= i;
 				firstDone = true;
 			}
-			else if ((charIdx != 0) && strcmp(&value[charIdx], colorNames[i]) == 0)
+			else if ((charIdx != 0) && (strcmp(&value[charIdx], colorNames[i]) == 0))
 			{
 				ret |= (u8)(i << 4);
 				secondDone = true;
@@ -497,6 +491,11 @@ static inline bool s_fSettings_checkRGBColor(fColor_t * restrict col, const json
 	}
 
 	return false;
+}
+
+static inline void s_fSettings_loadLanguage(const jsonObject_t * restrict obj)
+{
+	// load language details
 }
 
 
@@ -681,6 +680,29 @@ const wchar * fSettings_loadFromFile(fSettings_t * restrict self)
 				}
 			}
 		}
+
+		const char * langStr = NULL;
+		if ((attr = jsonObject_get(obj, "language")) != NULL)
+		{
+			langStr = jsonValue_getString(attr, &suc);
+		}
+		fLang_setLang8(langStr);
+
+		const jsonObject_t * restrict lObjs;
+		if ( ((langStr != NULL) && ((attr = jsonObject_get(obj, "languages")) != NULL) &&
+		     ( (lObjs = jsonValue_getObject(attr, &suc)) != NULL) && suc) )
+		{
+			const jsonObject_t * restrict lObj;
+			// language is defined
+			if ( ((attr = jsonObject_get(lObjs, langStr)) != NULL) &&
+			    ( (lObj = jsonValue_getObject(attr, &suc)) != NULL) && suc)
+			{
+				// start loading parts of language
+				s_fSettings_loadLanguage(lObj);
+			}
+		}
+
+		fLang_init();
 	}
 
 	// Free JSON object

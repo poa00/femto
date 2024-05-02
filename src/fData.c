@@ -440,4 +440,5 @@ void fData_destroy(fData_t * restrict self)
 	self->filesMax  = 0;
 
 	fSettings_destroy(&self->settings);
+	fLang_destroy();
 }

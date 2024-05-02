@@ -7,7 +7,7 @@ typedef enum fLangIds
 {
 	flangHELP_GENERAL,
 	flangHELP_INDENDATION,
-	flangHELP_AESTHETHICS,
+	flangHELP_AESTHETICS,
 	flangHELP_MISCELLANEOUS,
 
 
@@ -15,7 +15,7 @@ typedef enum fLangIds
 
 } fLangIds_e;
 
-extern const char * flang_strings[flang_size];
+extern const wchar * flang_strings[flang_size];
 
 #define flang_get(id)  (flang_strings[id])
 

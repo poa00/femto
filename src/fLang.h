@@ -3,7 +3,7 @@
 
 #include "fCommon.h"
 
-typedef enum fLangIds
+typedef enum fLangId
 {
 	flangHELP_GENERAL,
 	flangHELP_INDENDATION,
@@ -13,11 +13,11 @@ typedef enum fLangIds
 
 	flang_size
 
-} fLangIds_e;
+} fLangId_e;
 
-extern const wchar * flang_strings[flang_size];
+extern const wchar * fLang_strings[flang_size];
 
-#define flang_get(id)  (flang_strings[id])
+#define fLang_get(id)  (fLang_strings[id])
 
 
 #define FEMTO_HELP_GENERAL_DEF \

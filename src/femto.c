@@ -295,10 +295,10 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 		{ L"miscellaneous", L"other",      NULL }
 	};
 	const wchar * descriptions[] = {
-		flang_get(flangHELP_GENERAL),
-		flang_get(flangHELP_INDENDATION),
-		flang_get(flangHELP_AESTHETICS),
-		flang_get(flangHELP_MISCELLANEOUS)
+		fLang_get(flangHELP_GENERAL),
+		fLang_get(flangHELP_INDENDATION),
+		fLang_get(flangHELP_AESTHETICS),
+		fLang_get(flangHELP_MISCELLANEOUS)
 	};
 
 	fwprintf(stderr, L"Usage: %S [options] [file]\n", app);

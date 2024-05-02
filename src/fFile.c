@@ -606,6 +606,12 @@ bool fFile_addSpecialCh(
 			self->data.bUpdateAll  = true;
 		}
 		break;
+	case FEMTO_MOVECURSOR_LEFT:
+		
+		break;
+	case FEMTO_MOVECURSOR_RIGHT:
+		
+		break;
 	case VK_LEFT:	// Left arrow
 		if (lastcurnode->curx > 0)
 		{

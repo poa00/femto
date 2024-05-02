@@ -73,12 +73,14 @@ typedef unsigned char uchar;
 
 #define MAX_STATUS 512
 
-#define FEMTO_SHIFT_DEL     0xE000
-#define FEMTO_MOVELINE_UP   0xE001
-#define FEMTO_MOVELINE_DOWN 0xE002
-#define FEMTO_SEL_DELETE    0xE003
-#define FEMTO_COPY          0xE004
-#define FEMTO_PASTE         0xE005
+#define FEMTO_SHIFT_DEL        0xE000
+#define FEMTO_MOVELINE_UP      0xE001
+#define FEMTO_MOVELINE_DOWN    0xE002
+#define FEMTO_SEL_DELETE       0xE003
+#define FEMTO_COPY             0xE004
+#define FEMTO_PASTE            0xE005
+#define FEMTO_MOVECURSOR_LEFT  0xE006
+#define FEMTO_MOVECURSOR_RIGHT 0xE007
 
 #define FEMTO_DEFAULT_COLOR (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE)
 

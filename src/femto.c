@@ -295,10 +295,10 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 		{ L"miscellaneous", L"other",      NULL }
 	};
 	const wchar * descriptions[] = {
-		FEMTO_HELP_GENERAL,
-		FEMTO_HELP_INDENDATION,
-		FEMTO_HELP_AESTHETICS,
-		FEMTO_HELP_MISCELLANEOUS
+		flang_get(flangHELP_GENERAL),
+		flang_get(flangHELP_INDENDATION),
+		flang_get(flangHELP_AESTHETICS),
+		flang_get(flangHELP_MISCELLANEOUS)
 	};
 
 	fwprintf(stderr, L"Usage: %S [options] [file]\n", app);
@@ -327,12 +327,12 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 		// print standard help
 		fwprintf(
 			stderr,
-			L"By categories:\n"
-			
-			FEMTO_HELP_GENERAL
-			FEMTO_HELP_INDENDATION
-			FEMTO_HELP_AESTHETICS
-			FEMTO_HELP_MISCELLANEOUS
+			L"By categories:\n%s%s%s%s",
+
+			descriptions[0],
+			descriptions[1],
+			descriptions[2],
+			descriptions[3]
 		);
 
 		return;
@@ -1206,6 +1206,32 @@ static inline bool s_femto_inner_kbdHandle(
 					swprintf_s(tempstr, MAX_STATUS, L"\u2193 #%u", keyCount);
 				}
 				break;
+			case VK_LEFT:	// Left arrow
+				// Check for alt key
+				if ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000))
+				{
+					fData_cancelHighlight(peditor);
+					swprintf_s(tempstr, MAX_STATUS, L"'ALT' + \u2190 #%u", keyCount);
+					wVirtKey = FEMTO_MOVECURSOR_LEFT;
+				}
+				else
+				{
+					swprintf_s(tempstr, MAX_STATUS, L"\u2190 #%u", keyCount);
+				}
+				break;
+			case VK_RIGHT:	// Right arrow
+				// Check for alt key
+				if ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000))
+				{
+					fData_cancelHighlight(peditor);
+					swprintf_s(tempstr, MAX_STATUS, L"'ALT' + \u2192 #%u", keyCount);
+					wVirtKey = FEMTO_MOVECURSOR_RIGHT;
+				}
+				else
+				{
+					swprintf_s(tempstr, MAX_STATUS, L"\u2192 #%u", keyCount);
+				}
+				break;
 			case VK_RETURN:	// Enter key
 			case VK_PRIOR:	// Page up
 			case VK_NEXT:	// Page down
@@ -1214,14 +1240,10 @@ static inline bool s_femto_inner_kbdHandle(
 				fData_cancelHighlight(peditor);
 				/* fall through */
 			case VK_BACK:	// Backspace
-			case VK_LEFT:	// Left arrow
-			case VK_RIGHT:	// Right arrow
 			{
 				static const wchar * buf[] = {
 					[VK_RETURN] = L"'RET'",
 					[VK_BACK]   = L"'BS'",
-					[VK_LEFT]   = L"\u2190",
-					[VK_RIGHT]  = L"\u2192",
 					[VK_PRIOR]  = L"'PGUP'",
 					[VK_NEXT]   = L"'PGDOWN'",
 					[VK_END]	= L"'END'",
@@ -1416,6 +1438,10 @@ static inline bool s_femto_inner_mouseHandle(
 	
 			if (pfile->data.pcury != NULL)
 			{
+				// rememember the current line node, line number (just in case) and cursor x-position
+				
+
+
 				const fLine_t * restrict lastcurnode = pfile->data.currentNode;
 				pfile->data.currentNode = pfile->data.pcury;
 				fLine_moveCursorVert(&pfile->data.currentNode, (isize)pos.Y);
@@ -1437,6 +1463,7 @@ static inline bool s_femto_inner_mouseHandle(
 						((hl->beg == curNode) && (hl->begx > curNode->curx));
 				}
 				fData_refreshEditAsync(peditor);
+				
 				
 				if (ir->dwEventFlags & MOUSE_MOVED)
 				{

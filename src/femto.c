@@ -359,7 +359,7 @@ void femto_printVersion(void)
 	fwprintf(
 		stderr,
 		L"femto %s\n"
-		"Copyright (C) 2023 makuke1234\n"
+		"Copyright (C) 2024 makuke1234\n"
 		"This software is provided \"as is\", without warranty. Use at your own risk.\n"
 		"See https://github.com/makuke1234/femto for more details.\n",
 		FEMTO_VERSION_STR

@@ -205,8 +205,7 @@ fErr_e fSettings_cmdLine(fSettings_t * restrict self, int argc, const wchar ** r
 			self->helpArg = wcsdup_s(farg.begin, (usize)(farg.end - farg.begin));
 		}
 		self->bHelpRequest = true;
-		free(argumentsUsed);
-		return ferrOK;
+		goto loadSettings_label1;
 	}
 
 	fArg_fetchArgv(argc, argv, L"ver", &mi, 0);
@@ -231,6 +230,7 @@ fErr_e fSettings_cmdLine(fSettings_t * restrict self, int argc, const wchar ** r
 
 	/* **************** Other settings ******************* */
 
+loadSettings_label1: ;
 	ret = fArg_fetchArgv(argc, argv, L"set", &mi, 1, &farg);
 	if ((mi != 0) && (ret == 2))
 	{
@@ -250,6 +250,10 @@ fErr_e fSettings_cmdLine(fSettings_t * restrict self, int argc, const wchar ** r
 		{
 			free(mem);
 		}
+	}
+	if (self->bHelpRequest)
+	{
+		goto loadSettings_label2;
 	}
 
 	ret = fArg_fetchArgv(argc, argv, L"tabsS", &mi, 1, &farg);
@@ -364,6 +368,8 @@ fErr_e fSettings_cmdLine(fSettings_t * restrict self, int argc, const wchar ** r
 		// Just in case, redundant otherwise
 		argumentsUsed[argc - 2] = true;
 	}
+
+loadSettings_label2: ;
 	if (self->settingsFileName == NULL)
 	{
 		const wchar * fSetFile = NULL;
@@ -382,10 +388,16 @@ fErr_e fSettings_cmdLine(fSettings_t * restrict self, int argc, const wchar ** r
 	if (result != NULL)
 	{
 		wcsncpy_s(self->lastErr, FEMTO_SETTINGS_ERR_MAX, result, FEMTO_SETTINGS_ERR_MAX);
+		free(self->settingsFileName);
+		self->settingsFileName = NULL;
 	}
 
 	// Everything is OK
 	free(argumentsUsed);
+	if (self->bHelpRequest)
+	{
+		return ferrOK;
+	}
 
 	fLog_enable(self->bEnableLogging);
 
@@ -493,9 +505,27 @@ static inline bool s_fSettings_checkRGBColor(fColor_t * restrict col, const json
 	return false;
 }
 
-static inline void s_fSettings_loadLanguage(const jsonObject_t * restrict obj)
+static inline void s_fSettings_loadLanguage(isize langIdx, const jsonObject_t * restrict obj)
 {
 	// load language details
+
+	const jsonValue_t * restrict attr;
+	for (usize i = 0; i < flang_size; ++i)
+	{
+		assert(fLang_tokens[i] != NULL);
+		if ((attr = jsonObject_get(obj, fLang_tokens[i])) == NULL)
+		{
+			continue;
+		}
+
+		bool suc;
+		const char * value = jsonValue_getString(attr, &suc);
+		if ((value != NULL) && suc)
+		{
+			// add token value to language definition
+			fLang_addKeyword8(langIdx, i, value);
+		}
+	}
 }
 
 
@@ -686,7 +716,7 @@ const wchar * fSettings_loadFromFile(fSettings_t * restrict self)
 		{
 			langStr = jsonValue_getString(attr, &suc);
 		}
-		fLang_setLang8(langStr);
+		isize langIdx = fLang_setLang8(langStr);
 
 		const jsonObject_t * restrict lObjs;
 		if ( ((langStr != NULL) && ((attr = jsonObject_get(obj, "languages")) != NULL) &&
@@ -698,10 +728,11 @@ const wchar * fSettings_loadFromFile(fSettings_t * restrict self)
 			    ( (lObj = jsonValue_getObject(attr, &suc)) != NULL) && suc)
 			{
 				// start loading parts of language
-				s_fSettings_loadLanguage(lObj);
+				s_fSettings_loadLanguage(langIdx, lObj);
 			}
 		}
 
+		// initialize currently selected language
 		fLang_init();
 	}
 

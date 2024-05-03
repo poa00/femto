@@ -29,13 +29,18 @@ int wmain(int argc, const wchar * argv[])
 				wchar errMsg[FEMTO_SETTINGS_ERR_MAX];
 				fSettings_lastError(&editor.settings, errMsg, FEMTO_SETTINGS_ERR_MAX);
 				wprintf(L"[Settings]: %S\n", errMsg);
+				if (editor.settings.settingsFileName == NULL)
+				{
+					editor.settings.settingsFileName = wcsdup(errMsg);
+				}
+
 				femto_printHelpClue(argv[0]);
 			}
 			else
 			{
 				fErr_print(errCode);
+				return 2;
 			}
-			return 2;
 		}
 		else if (editor.settings.bHelpRequest)
 		{

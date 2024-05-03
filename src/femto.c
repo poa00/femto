@@ -327,7 +327,7 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 		// print standard help
 		fwprintf(
 			stderr,
-			L"By categories:\n%s%s%s%s",
+			L"By categories:\n%S%S%S%S",
 
 			descriptions[0],
 			descriptions[1],
@@ -606,7 +606,7 @@ static inline void s_femto_inner_closeTab(fData_t * restrict peditor, wchar * re
 	}
 
 	const wchar * restrict fname = pfile->fileName;
-	swprintf_s(tempstr, MAX_STATUS, L"Closed tab %s", (fname == NULL) ? L"untitled" : fname);
+	swprintf_s(tempstr, MAX_STATUS, L"Closed tab %s", (fname == NULL) ? fLang_get(flangUNTITLED) : fname);
 	fData_closeTab(peditor);
 
 	peditor->files[peditor->fileIdx]->data.bUpdateAll = true;

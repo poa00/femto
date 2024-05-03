@@ -11,10 +11,6 @@ typedef enum fLangId
 	flangHELP_AESTHETICS,
 	flangHELP_MISCELLANEOUS,
 	flangUNTITLED,
-	flangSETTINGS_FILE1,
-	flangSETTINGS_FILE2,
-	flangSETTINGS_FILE3,
-	flangSETTINGS_FILE4,
 
 	flang_size
 
@@ -22,7 +18,9 @@ typedef enum fLangId
 
 typedef wchar * fLangArr_t[flang_size];
 typedef const wchar * fCLangArr_t[flang_size];
+typedef const char * fCLangArr8_t[flang_size];
 
+extern const fCLangArr8_t fLang_tokens;
 extern fCLangArr_t fLang_strings;
 
 /**
@@ -34,6 +32,7 @@ extern fCLangArr_t fLang_strings;
 bool fLang_init(void);
 isize fLang_setLang8(const char * restrict language);
 isize fLang_setLang(const wchar * restrict language);
+bool fLang_addKeyword8(isize langId, fLangId_e kwId, const char * restrict keyword);
 bool fLang_addKeyword(isize langId, fLangId_e kwId, const wchar * restrict keyword);
 void fLang_destroy(void);
 
@@ -65,7 +64,7 @@ L"\nAesthetics:\n\n" \
 L"\nMiscellaneous:\n\n" \
 "  --log=[value] Specifies the use of logging mode\n"
 
-#define FEMTO_UNTITLED_NAME L"untitled"
+#define FEMTO_UNTITLED_NAME  L"untitled"
 
 
 

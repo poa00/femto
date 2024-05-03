@@ -79,5 +79,14 @@
 		"XMLid": 			"",
 		"CSSselector": 		"",
 		"CSSproperty": 		""
+	},
+	
+	"language": "estonian",
+	"languages":
+	{
+		"estonian":
+		{
+			"untitled": "nimetu"
+		}
 	}
 }

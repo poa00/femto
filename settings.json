@@ -86,7 +86,34 @@
 	{
 		"estonian":
 		{
-			"untitled": "nimetu"
+			"general": "\nÜldine:\n\n  --h Kuvab seda lehte\n",
+			"indent": "\nTaane:\n\n  --tabsToSpaces=[väärtus]  true/false, 1/0\n",
+			"aesthetics": "\nEsteetika:\n\n  --whitespaceVisible=[väärtus]  true/false, 1/0\n",
+			"misc": "\nMuu:\n\n  --log=[väärtus] Määrab logimisrežiimi kasutuse\n",
+			"clue": "Kõikide saadaval olevate käskluste kuvamiseks kirjuta",
+			"keyword": "Abi märksõna",
+			"categories": "Kategooriate kaupa",
+			"usage": "Kasutamine:",
+			
+			"file": "Fail",
+			"untitled": "nimetu",
+			"unsaved": "Salvestamata fail(id)",
+			"is-unsaved": "on salvestamata",
+			"press": "Vajutage",
+			"confirm-close": "sulgemise kinnitamiseks",
+			"confirm-exit": "väljumise kinnitamiseks",
+			"closed-tab": "Suleti vahekaart",
+			"opt-file": "[valikud] [fail]",
+			"nothing-new": "Pole midagi uut salvestada",
+			"open-error": "Faili avamise viga!",
+			"write-error": "Faili kirjutamise viga!",
+			"mem-error": "Mälu allokeerimise viga!",
+			"wrote": "Kirjutati",
+			"bytes": "baiti",
+			"bytes-to": "baiti faili",
+			"unknown-comb": "Tundmatu klahvikombinatsioon!",
+			"caps-on": "Suurtõstulukk sees",
+			"caps-off": "Suurtõstulukk väljas"
 		}
 	}
 }

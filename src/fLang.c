@@ -6,24 +6,63 @@ const fCLangArr8_t fLang_tokens = {
 	[flangHELP_INDENDATION] 	= "indent",
 	[flangHELP_AESTHETICS] 		= "aesthetics",
 	[flangHELP_MISCELLANEOUS] 	= "misc",
-	[flangUNTITLED] 			= "untitled"
+	[flangHELP_CLUE]            = "clue",
+	[flangHELP_KEYWORD] 		= "keyword",
+	[flangCATEGORIES] 			= "categories",
+	[flangUSAGE] 				= "usage",
+
+	[flangFILE] 				= "file",
+	[flangUNTITLED] 			= "untitled",
+	[flangUNSAVED] 				= "unsaved",
+	[flangIS_UNSAVED] 			= "is-unsaved",
+	[flangPRESS] 				= "press",
+	[flangCONFIRM_CLOSE] 		= "confirm-close",
+	[flangCONFIRM_EXIT] 		= "confirm-exit",
+	[flangCLOSED_TAB] 			= "closed-tab",
+	[flangOPT_FILE] 			= "opt-file",
+	[flangNOTHING_NEW] 			= "nothing-new",
+	[flangOPEN_ERROR] 			= "open-error",
+	[flangWRITE_ERROR] 			= "write-error",
+	[flangMEM_ERROR] 			= "mem-error",
+	[flangWROTE] 				= "wrote",
+	[flangBYTES] 				= "bytes",
+	[flangBYTES_TO] 			= "bytes-to",
+	[flangUNKNOWN_COMB] 		= "unknown-comb",
+	[flangCAPS_ON] 				= "caps-on",
+	[flangCAPS_OFF] 			= "caps-off",
 };
 
-static const fCLangArr_t s_fLang_defStrings = {
-	[flangHELP_GENERAL] 		= FEMTO_HELP_GENERAL_DEF,	
-	[flangHELP_INDENDATION] 	= FEMTO_HELP_INDENDATION_DEF,
-	[flangHELP_AESTHETICS] 		= FEMTO_HELP_AESTHETICS_DEF,
-	[flangHELP_MISCELLANEOUS] 	= FEMTO_HELP_MISCELLANEOUS_DEF,
-	[flangUNTITLED] 			= FEMTO_UNTITLED_NAME,
-};
+#define fLang_string_contents \
+	[flangHELP_GENERAL] 		= FLANG_HELP_GENERAL_DEF, \
+	[flangHELP_INDENDATION] 	= FLANG_HELP_INDENDATION_DEF, \
+	[flangHELP_AESTHETICS] 		= FLANG_HELP_AESTHETICS_DEF, \
+	[flangHELP_MISCELLANEOUS] 	= FLANG_HELP_MISCELLANEOUS_DEF, \
+	[flangHELP_CLUE]            = FLANG_HELP_CLUE, \
+	[flangHELP_KEYWORD] 		= FLANG_HELP_KEYWORD, \
+	[flangCATEGORIES] 			= FLANG_CATEGORIES, \
+	[flangUSAGE] 				= FLANG_USAGE, \
+	\
+	[flangFILE] 				= FLANG_FILE, \
+	[flangUNTITLED] 			= FLANG_UNTITLED_NAME, \
+	[flangUNSAVED] 				= FLANG_UNSAVED, \
+	[flangPRESS] 				= FLANG_PRESS, \
+	[flangCONFIRM_CLOSE] 		= FLANG_CONFIRM_CLOSE, \
+	[flangCONFIRM_EXIT] 		= FLANG_CONFIRM_EXIT, \
+	[flangCLOSED_TAB] 			= FLANG_CLOSED_TAB, \
+	[flangOPT_FILE] 			= FLANG_OPT_FILE, \
+	[flangNOTHING_NEW] 			= FLANG_NOTHING_NEW, \
+	[flangOPEN_ERROR] 			= FLANG_OPEN_ERROR, \
+	[flangWRITE_ERROR] 			= FLANG_WRITE_ERROR, \
+	[flangMEM_ERROR] 			= FLANG_MEM_ERROR, \
+	[flangWROTE] 				= FLANG_WROTE, \
+	[flangBYTES_TO] 			= FLANG_BYTES_TO, \
+	[flangUNKNOWN_COMB] 		= FLANG_UNKNOWN_COMB, \
+	[flangCAPS_ON] 				= FLANG_CAPS_ON, \
+	[flangCAPS_OFF] 			= FLANG_CAPS_OFF,
 
-fCLangArr_t fLang_strings = {
-	[flangHELP_GENERAL] 		= FEMTO_HELP_GENERAL_DEF,	
-	[flangHELP_INDENDATION] 	= FEMTO_HELP_INDENDATION_DEF,
-	[flangHELP_AESTHETICS] 		= FEMTO_HELP_AESTHETICS_DEF,
-	[flangHELP_MISCELLANEOUS] 	= FEMTO_HELP_MISCELLANEOUS_DEF,
-	[flangUNTITLED] 			= FEMTO_UNTITLED_NAME,
-};
+static const fCLangArr_t s_fLang_defStrings = { fLang_string_contents };
+fCLangArr_t fLang_strings = { fLang_string_contents };
+
 
 
 static fLangArr_t * s_fLang_stringsArr = NULL;

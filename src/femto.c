@@ -301,7 +301,7 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 		fLang_get(flangHELP_MISCELLANEOUS)
 	};
 
-	fwprintf(stderr, L"Usage: %S [options] [file]\n", app);
+	fwprintf(stderr, L"%S %S %S\n", fLang_get(flangUSAGE), app, fLang_get(flangOPT_FILE));
 
 	isize selidx = -1;
 
@@ -327,8 +327,8 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 		// print standard help
 		fwprintf(
 			stderr,
-			L"By categories:\n%S%S%S%S",
-
+			L"%S:\n%S%S%S%S",
+			fLang_get(flangCATEGORIES),
 			descriptions[0],
 			descriptions[1],
 			descriptions[2],
@@ -342,7 +342,8 @@ void femto_printHelp(const wchar * restrict app, const wchar * restrict helpArg)
 
 	fwprintf(
 		stderr,
-		L"Help keyword: %S\n%S",
+		L"%S: %S\n%S",
+		fLang_get(flangHELP_KEYWORD),
 		helpArg,
 		descriptions[selidx]
 	);
@@ -351,7 +352,7 @@ void femto_printHelpClue(const wchar * restrict app)
 {
 	assert(app != NULL);
 
-	fwprintf(stderr, L"To show all available commands type:\n%S --help\n", app);
+	fwprintf(stderr, L"%S:\n%S --help\n", fLang_get(flangHELP_CLUE), app);
 }
 
 void femto_printVersion(void)
@@ -519,7 +520,7 @@ static inline bool s_femto_inner_quit(fData_t * restrict peditor, wchar * restri
 	}
 	u32 realLen = 0;
 
-	realLen += (u32)swprintf_s(tempstr, MAX_STATUS, L"Unsaved file(s): ");
+	realLen += (u32)swprintf_s(tempstr, MAX_STATUS, L"%s: ", fLang_get(flangUNSAVED));
 
 	// Scan for any unsaved work
 	bool unsavedAny = false;
@@ -539,7 +540,13 @@ static inline bool s_femto_inner_quit(fData_t * restrict peditor, wchar * restri
 	}
 	else if (realLen < MAX_STATUS)
 	{
-		swprintf_s(tempstr + realLen, MAX_STATUS - realLen, L"Press %s to confirm exit", (key == sacCTRL_Q) ? L"Ctrl+Shift+Q" : normMsg);
+		swprintf_s(
+			tempstr + realLen, MAX_STATUS - realLen,
+			L"%s %s %s",
+			fLang_get(flangPRESS),
+			(key == sacCTRL_Q) ? L"Ctrl+Shift+Q" : normMsg,
+			fLang_get(flangCONFIRM_EXIT)
+		);
 	}
 
 	return true;
@@ -590,23 +597,27 @@ static inline void s_femto_inner_closeTab(fData_t * restrict peditor, wchar * re
 	{
 		u32 realLen = 0;
 
-		realLen += (u32)swprintf_s(tempstr, MAX_STATUS, L"File ");
+		realLen += (u32)swprintf_s(tempstr, MAX_STATUS, L"%s ", fLang_get(flangFILE));
 
 		// Scan for any unsaved work
 		fFile_checkUnsaved(pfile, NULL, NULL);
 		if (pfile->bUnsaved && (realLen < MAX_STATUS))
 		{
-			realLen += (u32)swprintf_s(tempstr + realLen, MAX_STATUS - realLen, L"%s is unsaved; ", pfile->fileName);
+			realLen += (u32)swprintf_s(tempstr + realLen, MAX_STATUS - realLen, L"%s %s; ", pfile->fileName, fLang_get(flangIS_UNSAVED));
 			if (realLen < MAX_STATUS)
 			{
-				swprintf_s(tempstr + realLen, MAX_STATUS - realLen, L"Press %s to confirm closing", L"Ctrl+Shift+W");
+				swprintf_s(
+					tempstr + realLen, MAX_STATUS - realLen,
+					L"%s %s %s",
+					fLang_get(flangPRESS), L"Ctrl+Shift+W", fLang_get(flangCONFIRM_CLOSE)
+				);
 			}
 			return;
 		}
 	}
 
 	const wchar * restrict fname = pfile->fileName;
-	swprintf_s(tempstr, MAX_STATUS, L"Closed tab %s", (fname == NULL) ? fLang_get(flangUNTITLED) : fname);
+	swprintf_s(tempstr, MAX_STATUS, L"%s %s", fLang_get(flangCLOSED_TAB), (fname == NULL) ? fLang_get(flangUNTITLED) : fname);
 	fData_closeTab(peditor);
 
 	peditor->files[peditor->fileIdx]->data.bUpdateAll = true;
@@ -633,19 +644,19 @@ static inline void s_femto_inner_saveAs(fData_t * restrict peditor, wchar * rest
 		switch (saved)
 		{
 		case ffwrNOTHING_NEW:
-			wcscpy_s(tempstr, MAX_STATUS, L"Nothing new to save");
+			wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangNOTHING_NEW));
 			break;
 		case ffwrOPEN_ERROR:
-			wcscpy_s(tempstr, MAX_STATUS, L"File open error!");
+			wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangOPEN_ERROR));
 			break;
 		case ffwrWRITE_ERROR:
-			wcscpy_s(tempstr, MAX_STATUS, L"File is write-protected!");
+			wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangWRITE_ERROR));
 			break;
 		case ffwrMEM_ERROR:
-			wcscpy_s(tempstr, MAX_STATUS, L"Memory allocation error!");
+			wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangMEM_ERROR));
 			break;
 		default:
-			swprintf_s(tempstr, MAX_STATUS, L"Wrote %zd bytes to %s", saved, inp);
+			swprintf_s(tempstr, MAX_STATUS, L"%s %zd %s %s", fLang_get(flangWROTE), saved, fLang_get(flangBYTES_TO), inp);
 			// Set console title
 			femto_setConTitle(inp, (usize)(peditor->fileIdx + 1), peditor->filesSize);
 		}
@@ -931,19 +942,19 @@ static inline bool s_femto_inner_kbdHandle(
 				switch (saved)
 				{
 				case ffwrNOTHING_NEW:
-					wcscpy_s(tempstr, MAX_STATUS, L"Nothing new to save");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangNOTHING_NEW));
 					break;
 				case ffwrOPEN_ERROR:
-					wcscpy_s(tempstr, MAX_STATUS, L"File open error!");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangOPEN_ERROR));
 					break;
 				case ffwrWRITE_ERROR:
-					wcscpy_s(tempstr, MAX_STATUS, L"File is write-protected!");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangWRITE_ERROR));
 					break;
 				case ffwrMEM_ERROR:
-					wcscpy_s(tempstr, MAX_STATUS, L"Memory allocation error!");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangMEM_ERROR));
 					break;
 				default:
-					swprintf_s(tempstr, MAX_STATUS, L"Wrote %zd bytes", saved);
+					swprintf_s(tempstr, MAX_STATUS, L"%s %zd %s", fLang_get(flangWROTE), saved, fLang_get(flangBYTES));
 				}
 			}
 		}
@@ -1255,7 +1266,7 @@ static inline bool s_femto_inner_kbdHandle(
 			case VK_CAPITAL:
 				wcscpy_s(
 					tempstr, MAX_STATUS,
-					(GetKeyState(VK_CAPITAL) & 0x0001) ? L"'CAPS' On" : L"'CAPS' Off"
+					(GetKeyState(VK_CAPITAL) & 0x0001) ? fLang_get(flangCAPS_ON) : fLang_get(flangCAPS_OFF)
 				);
 				break;
 			case VK_NUMLOCK:
@@ -1272,7 +1283,7 @@ static inline bool s_femto_inner_kbdHandle(
 				break;
 			default:
 				//draw = false;
-				wcscpy_s(tempstr, MAX_STATUS, L"Unkown key combination!");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangUNKNOWN_COMB));
 			}
 
 			if (send && fFile_addSpecialCh(

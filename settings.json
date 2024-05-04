@@ -155,7 +155,11 @@
 			"numlock-on": "'NUM.LUKK' sees",
 			"numlock-off": "'NUM.LUKK' väljas",
 			"scrlock-on": "'KER.LUKK' sees",
-			"scrlock-off": "'KER.LUKK' väljas"
+			"scrlock-off": "'KER.LUKK' väljas",
+			"btn-home": "'ALGUS'",
+			"btn-end": "'LÕPP'",
+			"btn-pgup": "'LEHT.YLES'",
+			"btn-pgdn": "'LEHT.ALLA'",
 		}
 	}
 }

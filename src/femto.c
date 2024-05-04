@@ -520,7 +520,7 @@ static inline bool s_femto_inner_quit(fData_t * restrict peditor, wchar * restri
 	}
 	u32 realLen = 0;
 
-	realLen += (u32)swprintf_s(tempstr, MAX_STATUS, L"%s: ", fLang_get(flangUNSAVED));
+	realLen += (u32)swprintf_s(tempstr, MAX_STATUS, L"%s: ", fLang_get(flangUNSAVED_FILES));
 
 	// Scan for any unsaved work
 	bool unsavedAny = false;
@@ -566,10 +566,12 @@ static inline void s_femto_inner_openTab(fData_t * restrict peditor, wchar * res
 
 		swprintf_s(
 			tempstr, MAX_STATUS,
-			L"Opened %s successfully; %s%s EOL sequences; Syntax: %S",
-			(inp == NULL) ? L"new tab" : inp,
+			L"Opened %s successfully; %s%s %s; %s: %S",
+			(inp == NULL) ? fLang_get(flangNEW_TAB) : inp,
+			fLang_get(flangEOL),
 			(pfile->eolSeq & eolCR) ? L"CR" : L"",
 			(pfile->eolSeq & eolLF) ? L"LF" : L"",
+			fLang_get(flangSYNTAX),
 			fStx_name(pfile->syntax)
 		);
 		fData_refreshEdit(peditor);
@@ -907,7 +909,7 @@ static inline bool s_femto_inner_kbdHandle(
 				if (fFile_checkUnsaved(pfile, NULL, NULL) != ffcrNOTHING_NEW)
 				{
 					reload = false;
-					wcscpy_s(tempstr, MAX_STATUS, L"Unsaved work detected. Press Ctrl+Shift+R to confirm reload");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCONFIRM_RELOAD));
 				}
 			}
 			if (reload)
@@ -922,9 +924,11 @@ static inline bool s_femto_inner_kbdHandle(
 					swprintf_s(
 						tempstr,
 						MAX_STATUS,
-						L"File reloaded successfully! %s%s EOL sequences",
+						L"%s %s%s %s",
+						fLang_get(flangRELOAD),
 						(pfile->eolSeq & eolCR) ? L"CR" : L"",
-						(pfile->eolSeq & eolLF) ? L"LF" : L""
+						(pfile->eolSeq & eolLF) ? L"LF" : L"",
+						fLang_get(flangEOL)
 					);
 				}
 				fData_refreshEdit(peditor);
@@ -961,7 +965,7 @@ static inline bool s_femto_inner_kbdHandle(
 		else if ((key == sacCTRL_E) && (prevkey != sacCTRL_E))
 		{
 			waitingEnc = true;
-			wcscpy_s(tempstr, MAX_STATUS, L"Waiting for EOL combination (F = CRLF, L = LF, C = CR)...");
+			wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangEOL_WAIT));
 		}
 		// Cut
 		else if ((key == sacCTRL_X) && (prevkey != sacCTRL_X))
@@ -976,7 +980,7 @@ static inline bool s_femto_inner_kbdHandle(
 					&peditor->settings
 				))
 				{
-					wcscpy_s(tempstr, MAX_STATUS, L"Cut error!");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCUT_ERROR));
 				}
 				else
 				{
@@ -988,12 +992,12 @@ static inline bool s_femto_inner_kbdHandle(
 					);
 					// Refresh
 					fData_refreshEdit(peditor);
-					wcscpy_s(tempstr, MAX_STATUS, L"Cut");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCUT));
 				}
 			}
 			else
 			{
-				wcscpy_s(tempstr, MAX_STATUS, L"Nothing to cut");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCUT_NOTHING));
 			}
 		}
 		// Copy
@@ -1007,16 +1011,16 @@ static inline bool s_femto_inner_kbdHandle(
 					&peditor->settings
 				))
 				{
-					wcscpy_s(tempstr, MAX_STATUS, L"Copy error!");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCOPY_ERROR));
 				}
 				else
 				{
-					wcscpy_s(tempstr, MAX_STATUS, L"Copy");
+					wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCOPY));
 				}
 			}
 			else
 			{
-				wcscpy_s(tempstr, MAX_STATUS, L"Nothing to copy");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangCOPY_NOTHING));
 			}
 		}
 		// Paste
@@ -1042,11 +1046,11 @@ static inline bool s_femto_inner_kbdHandle(
 			{
 				// Paste
 				fData_refreshEdit(peditor);
-				wcscpy_s(tempstr, MAX_STATUS, L"Paste");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangPASTE));
 			}
 			else
 			{
-				wcscpy_s(tempstr, MAX_STATUS, L"Paste error!");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangPASTE_ERROR));
 			}
 		}
 		else if (key == sacCTRL_F)
@@ -1121,9 +1125,11 @@ static inline bool s_femto_inner_kbdHandle(
 						swprintf_s(
 							tempstr,
 							MAX_STATUS,
-							L"File reloaded successfully! %s%s EOL sequences",
+							L"%s %s%s %s",
+							fLang_get(flangRELOAD),
 							(pfile->eolSeq & eolCR) ? L"CR" : L"",
-							(pfile->eolSeq & eolLF) ? L"LF" : L""
+							(pfile->eolSeq & eolLF) ? L"LF" : L"",
+							fLang_get(flangEOL)
 						);
 					}
 					fData_refreshEdit(peditor);
@@ -1138,13 +1144,13 @@ static inline bool s_femto_inner_kbdHandle(
 					send = false;
 					if (shift)
 					{
-						swprintf_s(tempstr, MAX_STATUS, L"Previous tab #%u", keyCount);
+						swprintf_s(tempstr, MAX_STATUS, L"%s #%u", fLang_get(flangPREV_TAB), keyCount);
 						--peditor->fileIdx;
 						peditor->fileIdx = (peditor->fileIdx < 0) ? (isize)peditor->filesSize - 1 : peditor->fileIdx;
 					}
 					else
 					{
-						swprintf_s(tempstr, MAX_STATUS, L"Next tab #%u", keyCount);
+						swprintf_s(tempstr, MAX_STATUS, L"%s #%u", fLang_get(flangNEXT_TAB), keyCount);
 						++peditor->fileIdx;
 						peditor->fileIdx = (peditor->fileIdx >= (isize)peditor->filesSize) ? 0 : peditor->fileIdx;
 					}
@@ -1160,12 +1166,12 @@ static inline bool s_femto_inner_kbdHandle(
 				}
 				else if (shift)
 				{
-					swprintf_s(tempstr, MAX_STATUS, L"\u2191 + 'TAB' #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"\u2191 + '%s' #%u", fLang_get(flangTAB), keyCount);
 					wVirtKey = VK_OEM_BACKTAB;
 				}
 				else
 				{
-					swprintf_s(tempstr, MAX_STATUS, L"'TAB' #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"'%s' #%u", fLang_get(flangTAB), keyCount);
 				}
 				break;
 			}

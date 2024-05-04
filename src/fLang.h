@@ -17,11 +17,12 @@ typedef enum fLangId
 
 	flangFILE,
 	flangUNTITLED,
-	flangUNSAVED,
+	flangUNSAVED_FILES,
 	flangIS_UNSAVED,
 	flangPRESS,
 	flangCONFIRM_CLOSE,
 	flangCONFIRM_EXIT,
+	flangCONFIRM_RELOAD,
 	flangCLOSED_TAB,
 	flangOPT_FILE,
 	flangNOTHING_NEW,
@@ -34,6 +35,24 @@ typedef enum fLangId
 	flangUNKNOWN_COMB,
 	flangCAPS_ON,
 	flangCAPS_OFF,
+	flangLOAD,
+	flangRELOAD,
+	flangEOL,
+	flangEOL_WAIT,
+	flangCUT_ERROR,
+	flangCUT,
+	flangCUT_NOTHING,
+	flangCOPY_ERROR,
+	flangCOPY,
+	flangCOPY_NOTHING,
+	flangPASTE,
+	flangPASTE_ERROR,
+	flangPREV_TAB,
+	flangNEXT_TAB,
+	flangTAB,
+	flangNEW_TAB,
+	flangSYNTAX,
+	flangSETTINGS,
 
 	flang_size
 
@@ -95,11 +114,12 @@ L"\nMiscellaneous:\n\n" \
 
 #define FLANG_FILE L"File"
 #define FLANG_UNTITLED_NAME  L"untitled"
-#define FLANG_UNSAVED  L"Unsaved file(s)"
+#define FLANG_UNSAVED_FILES  L"Unsaved file(s)"
 #define FLANG_IS_UNSAVED L"is unsaved"
 #define FLANG_PRESS  L"Press"
 #define FLANG_CONFIRM_CLOSE  L"to confirm closing"
 #define FLANG_CONFIRM_EXIT  L"to confirm exit"
+#define FLANG_CONFIRM_RELOAD  L"Unsaved work detected. Press Ctrl+Shift+R to confirm reload"
 #define FLANG_CLOSED_TAB L"Closed tab"
 #define FLANG_OPT_FILE  L"[options] [file]"
 #define FLANG_NOTHING_NEW L"Nothing new to save"
@@ -112,6 +132,23 @@ L"\nMiscellaneous:\n\n" \
 #define FLANG_UNKNOWN_COMB L"Unknown key combination!"
 #define FLANG_CAPS_ON   L"'CAPS' On"
 #define FLANG_CAPS_OFF  L"'CAPS' Off"
-
+#define FLANG_LOAD L"File loaded successfully!"
+#define FLANG_RELOAD L"File reloaded successfully!"
+#define FLANG_EOL L"EOL sequences"
+#define FLANG_EOL_WAIT L"Waiting for EOL combination (F = CRLF, L = LF, C = CR)..."
+#define FLANG_CUT_ERROR L"Cut error!"
+#define FLANG_CUT L"Cut"
+#define FLANG_CUT_NOTHING L"Nothing to cut"
+#define FLANG_COPY L"Copy"
+#define FLANG_COPY_ERROR L"Copy error!"
+#define FLANG_COPY_NOTHING L"Nothing to copy"
+#define FLANG_PASTE L"Paste"
+#define FLANG_PASTE_ERROR L"Paste error!"
+#define FLANG_PREV_TAB L"Previous tab"
+#define FLANG_NEXT_TAB L"Next tab"
+#define FLANG_TAB L"TAB"
+#define FLANG_NEW_TAB L"new tab"
+#define FLANG_SYNTAX L"Syntax"
+#define FLANG_SETTINGS L"Settings file"
 
 #endif

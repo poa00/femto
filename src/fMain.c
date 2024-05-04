@@ -78,10 +78,14 @@ int wmain(int argc, const wchar * argv[])
 		{
 			swprintf_s(
 				tempstr, MAX_STATUS,
-				L"File loaded successfully! %s%s EOL sequences; Settings file: %s; Syntax: %S",
+				L"%s %s%s %s; %s: %s; %s: %S",
+				fLang_get(flangLOAD),
 				(editor.files[editor.fileIdx]->eolSeq & eolCR) ? L"CR" : L"",
 				(editor.files[editor.fileIdx]->eolSeq & eolLF) ? L"LF" : L"",
+				fLang_get(flangEOL),
+				fLang_get(flangSETTINGS),
 				(editor.settings.settingsFileName != NULL) ? editor.settings.settingsFileName : L"-",
+				fLang_get(flangSYNTAX),
 				fStx_name(editor.files[editor.fileIdx]->syntax)
 			);
 		}

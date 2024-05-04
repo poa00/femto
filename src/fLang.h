@@ -53,6 +53,38 @@ typedef enum fLangId
 	flangNEW_TAB,
 	flangSYNTAX,
 	flangSETTINGS,
+	flangOPEN_FAIL,
+	flangOPENED,
+	flangSUCCESSFULLY,
+	flangFOUND,
+	flangSAVEAS,
+	flangSAVE_CANCEL,
+	flangSEARCH_NOTERM,
+	flangSEARCH_NOLINES,
+	flangSEARCH_END,
+	flangSEARCH_FORWARD,
+	flangSEARCH_BACKWARD,
+	flangSEARCH_CANCEL,
+	flangEOL_UNKNOWN,
+	flangUSING,
+	flangOPEN_CANCEL,
+	flangMOUSE_LEFT,
+	flangMOUSE_RIGHT,
+	flangMOVE,
+	flangOPEN,
+	flangNUMLOCK_ON,
+	flangNUMLOCK_OFF,
+	flangSCRLOCK_ON,
+	flangSCRLOCK_OFF,
+	flangBTNRETURN,
+	flangBTNBACKSPACE,
+	flangBTNPGUP,
+	flangBTNPGDN,
+	flangBTNEND,
+	flangBTNHOME,
+	flangBTNINS,
+	flangBTNDEL,
+	flangBTNALT,
 
 	flang_size
 
@@ -150,5 +182,37 @@ L"\nMiscellaneous:\n\n" \
 #define FLANG_NEW_TAB L"new tab"
 #define FLANG_SYNTAX L"Syntax"
 #define FLANG_SETTINGS L"Settings file"
+#define FLANG_OPEN_FAIL L"Failure while opening"
+#define FLANG_OPENED L"Opened"
+#define FLANG_SUCCESSFULLY L"successfully"
+#define FLANG_FOUND L"Found"
+#define FLANG_SAVEAS L"Save as"
+#define FLANG_SAVE_CANCEL L"Saving canceled by user"
+#define FLANG_SEARCH_NOTERM L"No search term entered"
+#define FLANG_SEARCH_NOLINES L"No lines to be searched"
+#define FLANG_SEARCH_END L"No more search results"
+#define FLANG_SEARCH_FORWARD L"Search forward"
+#define FLANG_SEARCH_BACKWARD L"Search backward"
+#define FLANG_SEARCH_CANCEL L"Search cancelled by user"
+#define FLANG_EOL_UNKNOWN L"Unknown EOL combination!"
+#define FLANG_USING L"Using"
+#define FLANG_OPEN_CANCEL L"Open canceled by user"
+#define FLANG_MOUSE_LEFT L"LCLICK"
+#define FLANG_MOUSE_RIGHT L"RCLICK"
+#define FLANG_MOVE L"MOVE"
+#define FLANG_OPEN L"Open"
+#define FLANG_NUMLOCK_ON L"'NUMLOCK' On"
+#define FLANG_NUMLOCK_OFF L"'NUMLOCK' Off"
+#define FLANG_SCRLOCK_ON L"'SCRLOCK' On"
+#define FLANG_SCRLOCK_OFF L"'SCRLOCK' Off"
+#define FLANG_BTNRETURN L"'RET'"
+#define FLANG_BTNBACKSPACE L"'BS'"
+#define FLANG_BTNPGUP L"'PGUP'"
+#define FLANG_BTNPGDN L"'PGDN'"
+#define FLANG_BTNEND L"'END'"
+#define FLANG_BTNHOME L"'HOME'"
+#define FLANG_BTNINS L"'INS'"
+#define FLANG_BTNDEL L"'DEL'"
+#define FLANG_BTNALT L"'ALT'"
 
 #endif

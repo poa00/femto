@@ -523,7 +523,9 @@ static inline void s_fSettings_loadLanguage(isize langIdx, const jsonObject_t * 
 		if ((value != NULL) && suc)
 		{
 			// add token value to language definition
-			fLang_addKeyword8(langIdx, i, value);
+			char * escValue = femto_escStr(value);
+			fLang_addKeyword8(langIdx, i, escValue);
+			free(escValue);
 		}
 	}
 }

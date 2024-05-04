@@ -566,10 +566,12 @@ static inline void s_femto_inner_openTab(fData_t * restrict peditor, wchar * res
 
 		swprintf_s(
 			tempstr, MAX_STATUS,
-			L"Opened %s successfully; %s%s %s; %s: %S",
+			L"%s %s %s; %s%s %s; %s: %S",
+			fLang_get(flangOPENED),
 			(inp == NULL) ? fLang_get(flangNEW_TAB) : inp,
-			fLang_get(flangEOL),
+			fLang_get(flangSUCCESSFULLY),
 			(pfile->eolSeq & eolCR) ? L"CR" : L"",
+			fLang_get(flangEOL),
 			(pfile->eolSeq & eolLF) ? L"LF" : L"",
 			fLang_get(flangSYNTAX),
 			fStx_name(pfile->syntax)
@@ -584,7 +586,7 @@ static inline void s_femto_inner_openTab(fData_t * restrict peditor, wchar * res
 	}
 	else
 	{
-		swprintf_s(tempstr, MAX_STATUS, L"Failure while opening %s!", (inp == NULL) ? L"new tab" : inp);
+		swprintf_s(tempstr, MAX_STATUS, L"%s %s!", fLang_get(flangOPEN_FAIL), (inp == NULL) ? fLang_get(flangNEW_TAB) : inp);
 	}
 }
 static inline void s_femto_inner_closeTab(fData_t * restrict peditor, wchar * restrict tempstr, bool forceClose)
@@ -634,7 +636,7 @@ static inline void s_femto_inner_saveAs(fData_t * restrict peditor, wchar * rest
 	fFile_t * restrict pfile = peditor->files[peditor->fileIdx];
 	assert(pfile != NULL);
 
-	wcscpy_s(tempstr, MAX_STATUS, L"Save as... :");
+	swprintf_s(tempstr, MAX_STATUS, L"%s... :", fLang_get(flangSAVEAS));
 	fData_statusMsg(peditor, tempstr, NULL);
 
 	wchar inp[MAX_STATUS];
@@ -678,7 +680,7 @@ static inline void s_femto_inner_saveAs(fData_t * restrict peditor, wchar * rest
 	}
 	else
 	{
-		wcscpy_s(tempstr, MAX_STATUS, L"Saving canceled by user");
+		wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangSAVE_CANCEL));
 	}
 }
 static inline void s_femto_inner_searchTerm(fData_t * restrict peditor, wchar * restrict tempstr, bool first)
@@ -688,7 +690,7 @@ static inline void s_femto_inner_searchTerm(fData_t * restrict peditor, wchar * 
 
 	if (peditor->psearchTerm == NULL)
 	{
-		wcscpy_s(tempstr, MAX_STATUS, L"No search term entered");
+		wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangSEARCH_NOTERM));
 		return;
 	}
 	else
@@ -702,7 +704,7 @@ static inline void s_femto_inner_searchTerm(fData_t * restrict peditor, wchar * 
 		fLine_t * restrict node = pfile->data.currentNode;
 		if (node == NULL)
 		{
-			wcscpy_s(tempstr, MAX_STATUS, L"No lines to be searched");
+			wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangSEARCH_NOLINES));
 			return;
 		}
 		
@@ -754,7 +756,7 @@ static inline void s_femto_inner_searchTerm(fData_t * restrict peditor, wchar * 
 				fData_refreshEdit(peditor);
 				// Update cursor horizontal position correctly
 				fData_refreshEdit(peditor);
-				swprintf_s(tempstr, MAX_STATUS, L"Found @%zu:%zu", node->lineNumber, node->curx + 1U);
+				swprintf_s(tempstr, MAX_STATUS, L"%s @%zu:%zu", fLang_get(flangFOUND), node->lineNumber, node->curx + 1U);
 
 				return;
 			}
@@ -763,14 +765,14 @@ static inline void s_femto_inner_searchTerm(fData_t * restrict peditor, wchar * 
 			deltaLines += delta;
 		}
 	}
-	wcscpy_s(tempstr, MAX_STATUS, L"No more search results");
+	wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangSEARCH_END));
 }
 static inline void s_femto_inner_find(fData_t * restrict peditor, wchar * restrict tempstr, bool backward)
 {
 	assert(peditor != NULL);
 	assert(tempstr != NULL);
 
-	wcscpy_s(tempstr, MAX_STATUS, backward ? L"Search backward: " : L"Search forward: ");
+	swprintf_s(tempstr, MAX_STATUS, L"%s: ", backward ? fLang_get(flangSEARCH_BACKWARD) : fLang_get(flangSEARCH_FORWARD));
 	fData_statusMsg(peditor, tempstr, NULL);
 
 	if (femto_askInput(peditor, peditor->searchBuf, MAX_STATUS))
@@ -782,7 +784,7 @@ static inline void s_femto_inner_find(fData_t * restrict peditor, wchar * restri
 	else
 	{
 		peditor->psearchTerm = NULL;
-		wcscpy_s(tempstr, MAX_STATUS, L"Search cancelled by user");
+		wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangSEARCH_CANCEL));
 		peditor->files[peditor->fileIdx]->data.bUpdateAll = true;
 		fData_refreshEdit(peditor);
 	}
@@ -849,7 +851,7 @@ static inline bool s_femto_inner_kbdHandle(
 				pfile->eolSeq = eolCR;
 				break;
 			default:
-				wcscpy_s(tempstr, MAX_STATUS, L"Unknown EOL combination!");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangEOL_UNKNOWN));
 				done = false;
 			}
 			if (done)
@@ -857,9 +859,11 @@ static inline bool s_femto_inner_kbdHandle(
 				swprintf_s(
 					tempstr,
 					MAX_STATUS,
-					L"Using %s%s EOL sequences",
+					L"%s %s%s %s",
+					fLang_get(flangUSING),
 					(pfile->eolSeq & eolCR) ? L"CR" : L"",
-					(pfile->eolSeq & eolLF) ? L"LF" : L""
+					(pfile->eolSeq & eolLF) ? L"LF" : L"",
+					fLang_get(flangEOL)
 				);
 			}
 
@@ -871,7 +875,7 @@ static inline bool s_femto_inner_kbdHandle(
 		}
 		else if (key == sacCTRL_O)
 		{
-			wcscpy_s(tempstr, MAX_STATUS, L"Open :");
+			swprintf_s(tempstr, MAX_STATUS, L"%s :", fLang_get(flangOPEN));
 			fData_statusMsg(peditor, tempstr, NULL);
 
 			wchar inp[MAX_STATUS];
@@ -882,7 +886,7 @@ static inline bool s_femto_inner_kbdHandle(
 			}
 			else
 			{
-				wcscpy_s(tempstr, MAX_STATUS, L"Open canceled by user");
+				wcscpy_s(tempstr, MAX_STATUS, fLang_get(flangOPEN_CANCEL));
 			}
 		}
 		else if ((key == sacCTRL_W) && (prevkey != sacCTRL_W))
@@ -1188,12 +1192,12 @@ static inline bool s_femto_inner_kbdHandle(
 				if (shift ^ ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000)))
 				{
 					fData_cancelHighlight(peditor);
-					swprintf_s(tempstr, MAX_STATUS, L"%s + 'DEL' #%u", shift ? L"\u2191" : L"'ALT'", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"%s + %s #%u", shift ? L"\u2191" : fLang_get(flangBTNALT), fLang_get(flangBTNDEL), keyCount);
 					wVirtKey = FEMTO_SHIFT_DEL;
 				}
 				else
 				{
-					swprintf_s(tempstr, MAX_STATUS, L"'DEL' #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"%s #%u", fLang_get(flangBTNDEL), keyCount);
 				}
 				break;
 			}
@@ -1202,7 +1206,7 @@ static inline bool s_femto_inner_kbdHandle(
 				if ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000))
 				{
 					fData_cancelHighlight(peditor);
-					swprintf_s(tempstr, MAX_STATUS, L"'ALT' + \u2191 #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"%s + \u2191 #%u", fLang_get(flangBTNALT), keyCount);
 					wVirtKey = FEMTO_MOVELINE_UP;
 				}
 				else
@@ -1215,7 +1219,7 @@ static inline bool s_femto_inner_kbdHandle(
 				if ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000))
 				{
 					fData_cancelHighlight(peditor);
-					swprintf_s(tempstr, MAX_STATUS, L"'ALT' + \u2193 #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"%s + \u2193 #%u", fLang_get(flangBTNALT), keyCount);
 					wVirtKey = FEMTO_MOVELINE_DOWN;
 				}
 				else
@@ -1228,7 +1232,7 @@ static inline bool s_femto_inner_kbdHandle(
 				if ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000))
 				{
 					fData_cancelHighlight(peditor);
-					swprintf_s(tempstr, MAX_STATUS, L"'ALT' + \u2190 #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"%s + \u2190 #%u", fLang_get(flangBTNALT), keyCount);
 					wVirtKey = FEMTO_MOVECURSOR_LEFT;
 				}
 				else
@@ -1241,7 +1245,7 @@ static inline bool s_femto_inner_kbdHandle(
 				if ((GetAsyncKeyState(VK_LMENU) & 0x8000) || (GetAsyncKeyState(VK_RMENU) & 0x8000))
 				{
 					fData_cancelHighlight(peditor);
-					swprintf_s(tempstr, MAX_STATUS, L"'ALT' + \u2192 #%u", keyCount);
+					swprintf_s(tempstr, MAX_STATUS, L"%s + \u2192 #%u", fLang_get(flangBTNALT), keyCount);
 					wVirtKey = FEMTO_MOVECURSOR_RIGHT;
 				}
 				else
@@ -1258,13 +1262,14 @@ static inline bool s_femto_inner_kbdHandle(
 				/* fall through */
 			case VK_BACK:	// Backspace
 			{
-				static const wchar * buf[] = {
-					[VK_RETURN] = L"'RET'",
-					[VK_BACK]   = L"'BS'",
-					[VK_PRIOR]  = L"'PGUP'",
-					[VK_NEXT]   = L"'PGDOWN'",
-					[VK_END]	= L"'END'",
-					[VK_HOME]   = L"'HOME'"
+				const wchar * buf[] = {
+					[VK_RETURN] = fLang_get(flangBTNRETURN),
+					[VK_BACK]   = fLang_get(flangBTNBACKSPACE),
+					[VK_PRIOR]  = fLang_get(flangBTNPGUP),
+					[VK_NEXT]   = fLang_get(flangBTNPGDN),
+					[VK_END]	= fLang_get(flangBTNEND),
+					[VK_HOME]   = fLang_get(flangBTNHOME),
+					[VK_INSERT] = fLang_get(flangBTNINS)
 				};
 				swprintf_s(tempstr, MAX_STATUS, L"%s #%u", buf[wVirtKey], keyCount);
 				break;
@@ -1278,13 +1283,13 @@ static inline bool s_femto_inner_kbdHandle(
 			case VK_NUMLOCK:
 				wcscpy_s(
 					tempstr, MAX_STATUS,
-					(GetKeyState(VK_NUMLOCK) & 0x0001) ? L"'NUMLOCK' On" : L"'NUMLOCK' Off"
+					(GetKeyState(VK_NUMLOCK) & 0x0001) ? fLang_get(flangNUMLOCK_ON) : fLang_get(flangNUMLOCK_OFF)
 				);
 				break;
 			case VK_SCROLL:
 				wcscpy_s(
 					tempstr, MAX_STATUS,
-					(GetKeyState(VK_SCROLL) & 0x0001) ? L"'SCRLOCK' On" : L"'SCRLOCK' Off"
+					(GetKeyState(VK_SCROLL) & 0x0001) ? fLang_get(flangSCRLOCK_ON) : fLang_get(flangSCRLOCK_OFF)
 				);
 				break;
 			default:
@@ -1484,12 +1489,12 @@ static inline bool s_femto_inner_mouseHandle(
 				
 				if (ir->dwEventFlags & MOUSE_MOVED)
 				{
-					swprintf_s(tempstr, MAX_STATUS, L"'LCLICK' + MOVE @%zu:%zu", curNode->lineNumber, curNode->curx + 1U);
+					swprintf_s(tempstr, MAX_STATUS, L"'%s' + %s @%zu:%zu", fLang_get(flangMOUSE_LEFT), fLang_get(flangMOVE), curNode->lineNumber, curNode->curx + 1U);
 				}
 				else
 				{
 					fLog_write("Mouse click @%zu, %zu", curNode->lineNumber, curNode->curx + 1U);
-					swprintf_s(tempstr, MAX_STATUS, L"'LCLICK' @%zu:%zu", curNode->lineNumber, curNode->curx + 1U);
+					swprintf_s(tempstr, MAX_STATUS, L"'%s' @%zu:%zu", fLang_get(flangMOUSE_LEFT), curNode->lineNumber, curNode->curx + 1U);
 				}
 			}
 
